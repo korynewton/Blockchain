@@ -84,7 +84,7 @@ class Blockchain(object):
         """
         guess = f'{last_proof}{proof}'.encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:4] == "000000"
+        return guess_hash[:6] == "000000"
 
     def valid_chain(self, chain):
         """
@@ -195,12 +195,12 @@ def full_chain():
 
 @app.route('/last_proof', methods=['GET'])
 def last_proof():
-        proof = blockchain.last_block["proof"]
-        response = {
-            "last proof": proof
-        }
+    proof = blockchain.last_block["proof"]
+    response = {
+        "last proof": proof
+    }
 
-        return jsonify(response), 200
+    return jsonify(response), 200
 
 
 # Note, when demoing, start with this, then change to the below
