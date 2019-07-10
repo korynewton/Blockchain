@@ -34,10 +34,15 @@ if __name__ == '__main__':
         req = requests.get("http://localhost:5000/chain").json()
         prev_proof = req["chain"][-1]["proof"]
         new_proof = proof_of_work(prev_proof)
-        breakpoint()
 
         # TODO: When found, POST it to the server {"proof": new_proof}
+        response = requests.post(
+            "http://localhost:5000/mine", json={"proof": new_proof}).json()
 
         # TODO: If the server responds with 'New Block Forged'
         # add 1 to the number of coins mined and print it.  Otherwise,
         # print the message from the server.
+        if response["message"] == "New Block Forged":
+            coins_mined += 1
+            print(response["message"])
+            print('total coins mined: ', coins_mined)
