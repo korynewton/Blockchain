@@ -6,6 +6,18 @@ import sys
 
 
 # TODO: Implement functionality to search for a proof
+def proof_of_work(prev_proof):
+    proof = 0
+    while validate_pow(prev_proof, proof) is False:
+        proof += 1
+    return proof
+
+
+def validate_pow(prev_proof, proof):
+    guess = f'{prev_proof}{proof}'.encode()
+    guess_hashed = hashlib.sha256(guess).hexdigest()
+
+    return guess_hashed[:4] == '0000'
 
 
 if __name__ == '__main__':
@@ -21,7 +33,8 @@ if __name__ == '__main__':
         # TODO: Get the last proof from the server and look for a new one
         req = requests.get("http://localhost:5000/chain").json()
         prev_proof = req["chain"][-1]["proof"]
-        break
+        new_proof = proof_of_work(prev_proof)
+        breakpoint()
 
         # TODO: When found, POST it to the server {"proof": new_proof}
 
