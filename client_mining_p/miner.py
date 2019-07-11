@@ -30,9 +30,7 @@ if __name__ == '__main__':
     coins_mined = 0
     # Run forever until interrupted
     while True:
-        # : Get the last proof from the server and look for a new one
-        # req = requests.get("http://localhost:5000/chain").json()
-        # prev_proof = req["chain"][-1]["proof"]
+        print('starting on a new block...')
         prev_proof = requests.get(
             "http://localhost:5000/last_proof").json()["last proof"]
         new_proof = proof_of_work(prev_proof)
@@ -46,5 +44,7 @@ if __name__ == '__main__':
         # print the message from the server.
         if response["message"] == "New Block Forged":
             coins_mined += 1
-            print(response["message"])
+            print("new block found!")
             print('total coins mined: ', coins_mined)
+        else:
+            print('block submitted was invalid...')
